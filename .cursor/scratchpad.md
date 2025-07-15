@@ -32,6 +32,7 @@
 - [ ] Close new tab after clicking a tile (implemented, needs user testing)
 - [x] Fix horizontal scroll bug (CSS changes to prevent overflow)
 - [x] Add dark mode and switcher on top right corner (best color/font practices)
+- [x] Makefile берет EXT_VERSION из manifest.json автоматически через jq
 
 ## Executor's Feedback or Assistance Requests
 
@@ -46,3 +47,7 @@ Previous implementation pinned individual tabs, but user clarified the requireme
 
 - Implemented dark mode and a switcher on the top right corner. The theme is persisted in localStorage and respects system preferences on first load. Colors and fonts follow best practices for readability and contrast.
 - Opened newtab.html for manual verification. Please check if the dark mode and switcher work as expected and if the color scheme and fonts look good to you. Let me know if you want any adjustments. 
+
+## Lessons
+
+- Для автоматического получения версии из JSON в Makefile удобно использовать jq. 
