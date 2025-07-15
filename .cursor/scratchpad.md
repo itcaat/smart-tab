@@ -41,6 +41,7 @@
 - [x] Do not show the 'newtab' group in the Smart Tabs UI (completed)
 - [x] When a user closes a tab via the tile, remove it from the list with a smooth animation (completed)
 - [x] When a user pins or unpins a tile (group), animate the tile smoothly as it changes position in the masonry layout (completed)
+- [x] Add a 'Close All Tabs' button to each tile (group), with confirmation and smooth animation (completed)
 
 ## Executor's Feedback or Assistance Requests
 
@@ -67,3 +68,4 @@ Previous implementation pinned individual tabs, but user clarified the requireme
 - Для плавного удаления вкладки: добавить класс .tab-removing с transition (opacity, max-height, margin, padding), после чего через setTimeout удалить элемент из DOM и обновить данные. Не делать полный re-render, если группа не пуста.
 - Tab removal is now smooth: when a user closes a tab, it fades out and collapses before being removed from the DOM. The group is only re-rendered if it becomes empty. 
 - Для плавной анимации pin/unpin группы: добавить класс .group-moving с transition (opacity, transform), затем через setTimeout выполнить изменение данных и re-render. Время setTimeout должно совпадать с CSS transition. 
+- Для кнопки "Close All Tabs": добавить подтверждение через confirm(), анимацию удаления всех вкладок группы (через .tab-removing), и только после этого обновлять данные и re-render группы. 

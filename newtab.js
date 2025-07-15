@@ -119,6 +119,40 @@ function renderSpeedDial(groups) {
       }, 260); // match CSS transition
     });
     header.appendChild(pinBtn);
+
+    // Close All Tabs button
+    const closeAllBtn = document.createElement('button');
+    closeAllBtn.className = 'speeddial-group-closeall';
+    closeAllBtn.title = 'Close all tabs in this group';
+    closeAllBtn.textContent = '✖';
+    closeAllBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!confirm(`Close ALL tabs for ${domain}? This cannot be undone.`)) return;
+      // Animate all tabs in group
+      const tabLis = ul.querySelectorAll('.speeddial-tab');
+      tabLis.forEach(li => {
+        li.classList.add('tab-removing');
+        li.style.pointerEvents = 'none';
+      });
+      setTimeout(() => {
+        // Remove all tabs in this group from allTabsCache
+        allTabsCache = allTabsCache.filter(t => {
+          try {
+            const url = new URL(t.url);
+            return url.hostname !== domain;
+          } catch {
+            return true;
+          }
+        });
+        // Close all tabs in Chrome
+        tabs.forEach(tab => {
+          if (chrome.tabs) chrome.tabs.remove(tab.id);
+        });
+        // Re-render to remove the group
+        filterAndRender(document.getElementById('search-input')?.value || '');
+      }, 320); // match CSS transition
+    });
+    header.appendChild(closeAllBtn);
     group.appendChild(header);
 
     // List of tabs
