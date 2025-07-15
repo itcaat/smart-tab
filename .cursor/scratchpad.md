@@ -31,6 +31,7 @@
 - [ ] User review and confirm privacy policy is ready for submission
 - [ ] Close new tab after clicking a tile (implemented, needs user testing)
 - [x] Fix horizontal scroll bug (CSS changes to prevent overflow)
+- [x] Add dark mode and switcher on top right corner (best color/font practices)
 
 ## Executor's Feedback or Assistance Requests
 
@@ -42,3 +43,6 @@
 - Opened newtab.html for manual verification. Please check if the horizontal scroll issue is resolved in your browser. If not, let me know so I can further investigate.
 
 Previous implementation pinned individual tabs, but user clarified the requirement is to pin/unpin entire groups (domains). Will update logic and UI to support pinning groups instead of tabs. Task 8 is now in progress for group pinning. 
+
+- Implemented dark mode and a switcher on the top right corner. The theme is persisted in localStorage and respects system preferences on first load. Colors and fonts follow best practices for readability and contrast.
+- Opened newtab.html for manual verification. Please check if the dark mode and switcher work as expected and if the color scheme and fonts look good to you. Let me know if you want any adjustments. 

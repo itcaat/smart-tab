@@ -136,4 +136,73 @@ body {
 .masonry-group.pinned-group {
   box-shadow: 0 2px 12px rgba(224,168,0,0.10);
   border: 2px solid #ffe082;
+}
+body.dark {
+  background: #181a20;
+  color: #f5f6fa;
+}
+body.dark #app {
+  background: #23262f;
+}
+body.dark .speeddial-group {
+  background: #20222a;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.28);
+  border: 1px solid #292b33;
+}
+body.dark .speeddial-group-header {
+  color: #f5f6fa;
+}
+body.dark .speeddial-domain {
+  color: #ffe27a;
+  text-shadow: 0 1px 2px #2d313a;
+}
+body.dark .speeddial-tab {
+  background: none;
+}
+body.dark .speeddial-tab:hover {
+  background: #2a2d34;
+}
+body.dark .speeddial-tab-title {
+  color: #f5f6fa;
+  text-shadow: 0 1px 2px #23262f;
+}
+body.dark .speeddial-tab-close {
+  color: #e0e0e0;
+}
+body.dark .speeddial-tab-close:hover {
+  background: #3a2323;
+  color: #ffb4b4;
+}
+body.dark .speeddial-group-pin {
+  color: #ffe082;
+}
+body.dark .speeddial-group-pin:hover {
+  background: #2a2d34;
+  color: #ffd54f;
+}
+body.dark .masonry-group.pinned-group {
+  box-shadow: 0 2px 16px rgba(224,168,0,0.18);
+  border: 2px solid #ffe082;
+}
+body.dark .masonry-group {
+  background: #20222a !important;
+  border: none !important;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.28);
+}
+#theme-switcher {
+  background: #fff;
+  color: #23262f;
+  border: 1px solid #e0e0e0;
+  transition: background 0.2s, color 0.2s;
+}
+#theme-switcher:hover {
+  background: #f4f6fa;
+}
+body.dark #theme-switcher {
+  background: #23262f;
+  color: #ffe082;
+  border: 1px solid #444857;
+}
+body.dark #theme-switcher:hover {
+  background: #181a20;
 } 
