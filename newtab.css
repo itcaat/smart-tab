@@ -1,3 +1,10 @@
+html, body {
+  overflow-x: hidden;
+  width: 100vw;
+}
+* {
+  box-sizing: border-box;
+}
 body {
   font-family: system-ui, sans-serif;
   background: #f4f6fa;
@@ -6,7 +13,7 @@ body {
 }
 
 #app {
-  width: 100vw;
+  width: 100%;
   margin: 0;
   background: #fff;
   border-radius: 0;
@@ -19,6 +26,7 @@ body {
   position: relative;
   width: 100%;
   min-height: 400px;
+  overflow-x: hidden;
 }
 .masonry-group {
   position: absolute;
