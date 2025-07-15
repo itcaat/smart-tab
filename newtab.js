@@ -128,16 +128,45 @@ function renderSpeedDial(groups) {
   }, 0);
 }
 
+let allTabsCache = [];
+
+function filterAndRender(query) {
+  query = (query || '').trim().toLowerCase();
+  const filteredGroups = {};
+  const groups = groupTabsByDomain(allTabsCache);
+  Object.entries(groups).forEach(([domain, tabs]) => {
+    // Фильтруем вкладки по title или url или домену
+    const matchDomain = domain.toLowerCase().includes(query);
+    const filteredTabs = tabs.filter(tab =>
+      (tab.title && tab.title.toLowerCase().includes(query)) ||
+      (tab.url && tab.url.toLowerCase().includes(query)) ||
+      matchDomain
+    );
+    if (filteredTabs.length > 0) {
+      filteredGroups[domain] = filteredTabs;
+    }
+  });
+  renderSpeedDial(filteredGroups);
+}
+
 function logAndRenderGroupedTabs() {
   if (!chrome.tabs) {
     document.getElementById('app').textContent = 'chrome.tabs API is not available. Please run as an extension!';
     return;
   }
   chrome.tabs.query({}, (tabs) => {
-    const groups = groupTabsByDomain(tabs);
-    console.log('Grouped tabs:', groups);
-    renderSpeedDial(groups);
+    allTabsCache = tabs;
+    filterAndRender(document.getElementById('search-input')?.value || '');
   });
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const search = document.getElementById('search-input');
+  if (search) {
+    search.addEventListener('input', e => {
+      filterAndRender(search.value);
+    });
+  }
+});
 
 logAndRenderGroupedTabs(); 
