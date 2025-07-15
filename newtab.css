@@ -25,6 +25,8 @@ body {
   transition: top 0.25s, left 0.25s;
   width: 260px;
   box-sizing: border-box;
+  border-radius: 8px;
+  overflow: hidden;
 }
 .speeddial-group {
   background: #f8fafc;
