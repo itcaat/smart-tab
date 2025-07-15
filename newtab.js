@@ -28,10 +28,13 @@ function renderSpeedDial(groups) {
   app.innerHTML = '';
   const container = document.createElement('div');
   container.className = 'speeddial';
+  app.appendChild(container);
 
+  // 1. Создаем массив DOM-элементов групп
+  const groupElems = [];
   Object.entries(groups).forEach(([domain, tabs]) => {
     const group = document.createElement('div');
-    group.className = 'speeddial-group';
+    group.className = 'masonry-group';
 
     // Header: favicon + domain
     const header = document.createElement('div');
@@ -83,8 +86,35 @@ function renderSpeedDial(groups) {
     });
     group.appendChild(ul);
     container.appendChild(group);
+    groupElems.push(group);
   });
-  app.appendChild(container);
+
+  // 2. После рендера — masonry layout
+  setTimeout(() => {
+    const containerWidth = container.clientWidth;
+    const groupWidth = 260 + 24; // ширина + gap
+    let columns = Math.floor(containerWidth / groupWidth);
+    if (columns < 1) columns = 1;
+    if (columns > 8) columns = 8;
+    const colHeights = Array(columns).fill(0);
+    const gap = 24;
+    groupElems.forEach((group, i) => {
+      group.style.position = 'absolute';
+      group.style.width = '260px';
+      // Найти колонку с минимальной высотой
+      let minCol = 0;
+      for (let c = 1; c < columns; ++c) {
+        if (colHeights[c] < colHeights[minCol]) minCol = c;
+      }
+      const left = minCol * (260 + gap);
+      const top = colHeights[minCol];
+      group.style.left = left + 'px';
+      group.style.top = top + 'px';
+      colHeights[minCol] += group.offsetHeight + gap;
+    });
+    // Высота контейнера
+    container.style.height = Math.max(...colHeights) + 'px';
+  }, 0);
 }
 
 function logAndRenderGroupedTabs() {

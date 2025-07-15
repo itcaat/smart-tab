@@ -6,7 +6,6 @@ body {
 }
 
 #app {
-  /* max-width: 900px; */
   width: 100vw;
   margin: 0;
   background: #fff;
@@ -17,11 +16,15 @@ body {
 }
 
 .speeddial {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: flex-start;
+  position: relative;
   width: 100%;
+  min-height: 400px;
+}
+.masonry-group {
+  position: absolute;
+  transition: top 0.25s, left 0.25s;
+  width: 260px;
+  box-sizing: border-box;
 }
 .speeddial-group {
   background: #f8fafc;
