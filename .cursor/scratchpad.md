@@ -39,6 +39,8 @@
 - [x] Make tiles use all available width responsively while preserving masonry style (JS/CSS updated)
 - [x] Test the new layout on various screen sizes to ensure tiles always use all available width and the masonry style is preserved (completed)
 - [x] Do not show the 'newtab' group in the Smart Tabs UI (completed)
+- [x] When a user closes a tab via the tile, remove it from the list with a smooth animation (completed)
+- [x] When a user pins or unpins a tile (group), animate the tile smoothly as it changes position in the masonry layout (completed)
 
 ## Executor's Feedback or Assistance Requests
 
@@ -62,3 +64,6 @@ Previous implementation pinned individual tabs, but user clarified the requireme
 - Для адаптивного masonry-алгоритма: вычислять количество колонок и ширину плитки динамически на основе ширины контейнера, с min/max шириной плитки и фиксированным gap. Это позволяет избежать горизонтального скролла и не ломает masonry-эффект.
 - Важно: при изменении размеров окна вызывать перерасчет layout, чтобы плитки всегда занимали всю ширину. 
 - Для скрытия группы newtab: фильтровать домены 'newtab', 'chrome://newtab', 'chrome-extension://newtab' при построении групп и при поиске. 
+- Для плавного удаления вкладки: добавить класс .tab-removing с transition (opacity, max-height, margin, padding), после чего через setTimeout удалить элемент из DOM и обновить данные. Не делать полный re-render, если группа не пуста.
+- Tab removal is now smooth: when a user closes a tab, it fades out and collapses before being removed from the DOM. The group is only re-rendered if it becomes empty. 
+- Для плавной анимации pin/unpin группы: добавить класс .group-moving с transition (opacity, transform), затем через setTimeout выполнить изменение данных и re-render. Время setTimeout должно совпадать с CSS transition. 

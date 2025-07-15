@@ -107,12 +107,16 @@ function renderSpeedDial(groups) {
     pinBtn.textContent = isDomainPinned(domain) ? '📌' : '📍';
     pinBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (isDomainPinned(domain)) {
-        unpinDomain(domain);
-      } else {
-        pinDomain(domain);
-      }
-      renderSpeedDial(groups); // re-render
+      // Animate group before re-render
+      group.classList.add('group-moving');
+      setTimeout(() => {
+        if (isDomainPinned(domain)) {
+          unpinDomain(domain);
+        } else {
+          pinDomain(domain);
+        }
+        renderSpeedDial(groups); // re-render after animation
+      }, 260); // match CSS transition
     });
     header.appendChild(pinBtn);
     group.appendChild(header);
@@ -138,8 +142,20 @@ function renderSpeedDial(groups) {
         e.stopPropagation();
         if (chrome.tabs) {
           chrome.tabs.remove(tab.id);
-          li.style.opacity = '0.5';
+          // Smooth removal animation
+          li.classList.add('tab-removing');
           li.style.pointerEvents = 'none';
+          setTimeout(() => {
+            li.remove();
+            // Optionally, update allTabsCache and re-render if group is empty
+            // Remove tab from allTabsCache
+            allTabsCache = allTabsCache.filter(t => t.id !== tab.id);
+            // If group is now empty, re-render to remove the group
+            const groupTabs = tabs.filter(t => t.id !== tab.id);
+            if (groupTabs.length === 0) {
+              filterAndRender(document.getElementById('search-input')?.value || '');
+            }
+          }, 320); // match CSS transition
         }
       });
       li.appendChild(closeBtn);
