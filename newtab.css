@@ -45,6 +45,7 @@ body {
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+  position: relative;
 }
 .speeddial-favicon {
   width: 20px;
@@ -105,4 +106,26 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 160px;
+}
+.speeddial-group-pin {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: #e0a800;
+  font-size: 1.1em;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+.speeddial-group-pin:hover {
+  background: #fffbe6;
+  color: #d18b00;
+}
+.masonry-group.pinned-group {
+  box-shadow: 0 2px 12px rgba(224,168,0,0.10);
+  border: 2px solid #ffe082;
 } 

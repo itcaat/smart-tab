@@ -33,6 +33,35 @@ function domainColor(domain) {
   return `hsl(${hue}, 56%, 92%)`;
 }
 
+// Utility to get/set pinned domains in localStorage
+function getPinnedDomains() {
+  try {
+    return JSON.parse(localStorage.getItem('pinnedDomains') || '[]');
+  } catch {
+    return [];
+  }
+}
+function setPinnedDomains(domains) {
+  localStorage.setItem('pinnedDomains', JSON.stringify(domains));
+}
+
+function isDomainPinned(domain) {
+  const pinned = getPinnedDomains();
+  return pinned.includes(domain);
+}
+function pinDomain(domain) {
+  const pinned = getPinnedDomains();
+  if (!pinned.includes(domain)) {
+    pinned.push(domain);
+    setPinnedDomains(pinned);
+  }
+}
+function unpinDomain(domain) {
+  let pinned = getPinnedDomains();
+  pinned = pinned.filter(d => d !== domain);
+  setPinnedDomains(pinned);
+}
+
 function renderSpeedDial(groups) {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -42,12 +71,22 @@ function renderSpeedDial(groups) {
 
   // 1. Создаем массив DOM-элементов групп
   const groupElems = [];
-  Object.entries(groups).forEach(([domain, tabs]) => {
+  // Sort: pinned groups first
+  const pinnedDomains = getPinnedDomains();
+  const sortedGroupEntries = Object.entries(groups).sort(([a], [b]) => {
+    const aPinned = pinnedDomains.includes(a);
+    const bPinned = pinnedDomains.includes(b);
+    if (aPinned && !bPinned) return -1;
+    if (!aPinned && bPinned) return 1;
+    return 0;
+  });
+  sortedGroupEntries.forEach(([domain, tabs]) => {
     const group = document.createElement('div');
     group.className = 'masonry-group';
     group.style.background = domainColor(domain);
+    if (isDomainPinned(domain)) group.classList.add('pinned-group');
 
-    // Header: favicon + domain
+    // Header: favicon + domain + pin button
     const header = document.createElement('div');
     header.className = 'speeddial-group-header';
     header.appendChild(createFavicon('https://' + domain, 'speeddial-favicon'));
@@ -55,6 +94,21 @@ function renderSpeedDial(groups) {
     domainSpan.className = 'speeddial-domain';
     domainSpan.textContent = domain;
     header.appendChild(domainSpan);
+    // Pin button for group
+    const pinBtn = document.createElement('button');
+    pinBtn.className = 'speeddial-group-pin';
+    pinBtn.title = isDomainPinned(domain) ? 'Unpin group' : 'Pin group';
+    pinBtn.textContent = isDomainPinned(domain) ? '📌' : '📍';
+    pinBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (isDomainPinned(domain)) {
+        unpinDomain(domain);
+      } else {
+        pinDomain(domain);
+      }
+      renderSpeedDial(groups); // re-render
+    });
+    header.appendChild(pinBtn);
     group.appendChild(header);
 
     // List of tabs
