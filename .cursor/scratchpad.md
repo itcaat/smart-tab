@@ -25,22 +25,13 @@
 6. Провести тестирование и отладку.
    - Success: Все работает стабильно, нет багов, UX удобен.
 
-# Project Status Board
-- [x] 1. Create Chrome extension structure
-- [x] 2. Implement tab capture and grouping
-- [x] 3. Implement speed dial UI
-- [x] 4. Tab activation on click
-- [x] 5. (Optional) UI/UX improvements
-- [x] 6. Testing and debugging
-- [ ] 7. Translate all UI, manifest, and comments to English
-- [ ] 8. Add pin/unpin group feature: user can pin a group (domain), and pinned groups always show on top of other groups
+## Project Status Board
 
-# Executor's Feedback or Assistance Requests
-Group pin/unpin feature implemented:
-- Each group (domain) now has a pin button (📍/📌) in its header.
-- Pinned groups are visually highlighted and always appear at the top of the tile list.
-- Pin state is saved in localStorage and persists across reloads.
+- [x] Draft privacy policy for Chrome Web Store publication (docs/privacy-policy.md)
+- [ ] User review and confirm privacy policy is ready for submission
 
-Please test the group pinning feature and confirm if it works as expected. If confirmed, I will mark the task as complete in the project status board.
+## Executor's Feedback or Assistance Requests
+
+- The privacy policy has been drafted in docs/privacy-policy.md, focusing on minimal data collection and user privacy, suitable for Chrome Web Store requirements. Please review the document and confirm if it meets your expectations or if any changes are needed before marking this task as complete.
 
 Previous implementation pinned individual tabs, but user clarified the requirement is to pin/unpin entire groups (domains). Will update logic and UI to support pinning groups instead of tabs. Task 8 is now in progress for group pinning. 
