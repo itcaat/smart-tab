@@ -73,13 +73,19 @@ function renderSpeedDial(groups) {
   const groupElems = [];
   // Sort: pinned groups first
   const pinnedDomains = getPinnedDomains();
-  const sortedGroupEntries = Object.entries(groups).sort(([a], [b]) => {
-    const aPinned = pinnedDomains.includes(a);
-    const bPinned = pinnedDomains.includes(b);
-    if (aPinned && !bPinned) return -1;
-    if (!aPinned && bPinned) return 1;
-    return 0;
-  });
+  const sortedGroupEntries = Object.entries(groups)
+    // Filter out 'newtab' and extension new tab domains
+    .filter(([domain]) => {
+      const lower = domain.toLowerCase();
+      return lower !== 'newtab' && lower !== 'chrome://newtab' && lower !== 'chrome-extension://newtab';
+    })
+    .sort(([a], [b]) => {
+      const aPinned = pinnedDomains.includes(a);
+      const bPinned = pinnedDomains.includes(b);
+      if (aPinned && !bPinned) return -1;
+      if (!aPinned && bPinned) return 1;
+      return 0;
+    });
   sortedGroupEntries.forEach(([domain, tabs]) => {
     const group = document.createElement('div');
     group.className = 'masonry-group';
@@ -158,21 +164,30 @@ function renderSpeedDial(groups) {
   // 2. После рендера — masonry layout
   setTimeout(() => {
     const containerWidth = container.clientWidth;
-    const groupWidth = 260 + 24; // ширина + gap
-    let columns = Math.floor(containerWidth / groupWidth);
-    if (columns < 1) columns = 1;
-    if (columns > 8) columns = 8;
-    const colHeights = Array(columns).fill(0);
+    const minTileWidth = 220;
+    const maxTileWidth = 320;
     const gap = 24;
+    // Calculate optimal columns and tile width
+    let columns = Math.floor((containerWidth + gap) / (minTileWidth + gap));
+    if (columns < 1) columns = 1;
+    // Calculate tile width so tiles fill all width
+    let tileWidth = Math.floor((containerWidth - gap * (columns - 1)) / columns);
+    if (tileWidth > maxTileWidth) {
+      tileWidth = maxTileWidth;
+      columns = Math.floor((containerWidth + gap) / (tileWidth + gap));
+      if (columns < 1) columns = 1;
+      tileWidth = Math.floor((containerWidth - gap * (columns - 1)) / columns);
+    }
+    const colHeights = Array(columns).fill(0);
     groupElems.forEach((group, i) => {
       group.style.position = 'absolute';
-      group.style.width = '260px';
+      group.style.width = tileWidth + 'px';
       // Найти колонку с минимальной высотой
       let minCol = 0;
       for (let c = 1; c < columns; ++c) {
         if (colHeights[c] < colHeights[minCol]) minCol = c;
       }
-      const left = minCol * (260 + gap);
+      const left = minCol * (tileWidth + gap);
       const top = colHeights[minCol];
       group.style.left = left + 'px';
       group.style.top = top + 'px';
@@ -192,6 +207,8 @@ function filterAndRender(query) {
   Object.entries(groups).forEach(([domain, tabs]) => {
     // Фильтруем вкладки по title или url или домену
     const matchDomain = domain.toLowerCase().includes(query);
+    // Filter out 'newtab' and extension new tab domains
+    if (domain.toLowerCase() === 'newtab' || domain.toLowerCase() === 'chrome://newtab' || domain.toLowerCase() === 'chrome-extension://newtab') return;
     const filteredTabs = tabs.filter(tab =>
       (tab.title && tab.title.toLowerCase().includes(query)) ||
       (tab.url && tab.url.toLowerCase().includes(query)) ||
