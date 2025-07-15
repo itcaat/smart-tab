@@ -144,6 +144,7 @@ function renderSpeedDial(groups) {
             if (tab.windowId !== undefined) {
               chrome.windows.update(tab.windowId, {focused: true});
             }
+            window.close(); // Close the new tab after activating
           });
         }
       });

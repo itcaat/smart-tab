@@ -29,9 +29,12 @@
 
 - [x] Draft privacy policy for Chrome Web Store publication (docs/privacy-policy.md)
 - [ ] User review and confirm privacy policy is ready for submission
+- [ ] Close new tab after clicking a tile (implemented, needs user testing)
 
 ## Executor's Feedback or Assistance Requests
 
 - The privacy policy has been drafted in docs/privacy-policy.md, focusing on minimal data collection and user privacy, suitable for Chrome Web Store requirements. Please review the document and confirm if it meets your expectations or if any changes are needed before marking this task as complete.
+
+- The feature to close the new tab after clicking a tile has been implemented. Please test this behavior: when you click a tile, the corresponding tab should be activated and the new tab page should close automatically. Let me know if it works as expected or if any adjustments are needed.
 
 Previous implementation pinned individual tabs, but user clarified the requirement is to pin/unpin entire groups (domains). Will update logic and UI to support pinning groups instead of tabs. Task 8 is now in progress for group pinning. 
