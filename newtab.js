@@ -23,6 +23,16 @@ function createFavicon(url, className) {
   return img;
 }
 
+function domainColor(domain) {
+  // Простой хеш -> HSL
+  let hash = 0;
+  for (let i = 0; i < domain.length; ++i) {
+    hash = domain.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue}, 56%, 92%)`;
+}
+
 function renderSpeedDial(groups) {
   const app = document.getElementById('app');
   app.innerHTML = '';
@@ -35,6 +45,7 @@ function renderSpeedDial(groups) {
   Object.entries(groups).forEach(([domain, tabs]) => {
     const group = document.createElement('div');
     group.className = 'masonry-group';
+    group.style.background = domainColor(domain);
 
     // Header: favicon + domain
     const header = document.createElement('div');
