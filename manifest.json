@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Smart Tabs",
-  "description": "Smart Tabs: grouped browser tabs on the new tab page.",
-  "version": "1.0.4",
+  "description": "Smart Tabs replaces your new tab page with a powerful dashboard that automatically groups your open tabs by website. Instantly find, switch, or close tabs with a single click. Pin your favorite sites, search across all tabs, and enjoy a clean, organized browsing experience—complete with dark mode and intuitive controls.",
+  "version": "1.0.5",
   "permissions": ["tabs"],
   "chrome_url_overrides": {
     "newtab": "newtab.html"

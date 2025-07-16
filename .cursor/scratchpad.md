@@ -42,6 +42,8 @@
 - [x] When a user closes a tab via the tile, remove it from the list with a smooth animation (completed)
 - [x] When a user pins or unpins a tile (group), animate the tile smoothly as it changes position in the masonry layout (completed)
 - [x] Add a 'Close All Tabs' button to each tile (group), with confirmation and smooth animation (completed)
+- [x] Update user-facing description in manifest.json
+- [x] Awaiting user review of new description (user approved)
 
 ## Executor's Feedback or Assistance Requests
 
