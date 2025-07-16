@@ -232,7 +232,24 @@ body.dark #theme-switcher {
 }
 body.dark #theme-switcher:hover {
   background: #181a20;
-} 
+}
+#remove-dupes-btn {
+  background: #fff;
+  color: #23262f;
+  border: 1px solid #e0e0e0;
+  transition: background 0.2s, color 0.2s;
+}
+#remove-dupes-btn:hover {
+  background: #f4f6fa;
+}
+body.dark #remove-dupes-btn {
+  background: #23262f;
+  color: #ffe082;
+  border: 1px solid #444857;
+}
+body.dark #remove-dupes-btn:hover {
+  background: #181a20;
+}
 .speeddial-tab.tab-removing {
   opacity: 0;
   max-height: 0;
@@ -240,7 +257,7 @@ body.dark #theme-switcher:hover {
   padding: 0;
   transition: opacity 0.3s, max-height 0.3s, margin 0.3s, padding 0.3s;
   overflow: hidden;
-} 
+}
 .masonry-group.group-moving {
   opacity: 0;
   transform: scale(0.95);

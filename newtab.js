@@ -317,6 +317,43 @@ window.addEventListener('DOMContentLoaded', () => {
       setTheme(current);
     });
   }
+
+  // Remove duplicates button logic
+  const removeDupesBtn = document.getElementById('remove-dupes-btn');
+  if (removeDupesBtn) {
+    removeDupesBtn.addEventListener('click', async () => {
+      if (!chrome.tabs) return;
+      // Get the current tab's id (the extension's new tab page)
+      chrome.tabs.query({active: true, currentWindow: true}, (currentTabs) => {
+        const currentTabId = currentTabs && currentTabs.length > 0 ? currentTabs[0].id : null;
+        // Find duplicates: keep one tab per unique URL, but never close the current extension tab
+        const urlToTab = {};
+        const duplicateTabIds = [];
+        for (const tab of allTabsCache) {
+          if (!tab.url) continue;
+          if (urlToTab[tab.url]) {
+            // Only add to duplicates if not the current tab
+            if (tab.id !== currentTabId) {
+              duplicateTabIds.push(tab.id);
+            }
+          } else {
+            urlToTab[tab.url] = tab.id;
+          }
+        }
+        if (duplicateTabIds.length === 0) {
+          alert('No duplicate tabs found.');
+          return;
+        }
+        if (!confirm(`Remove ${duplicateTabIds.length} duplicate tab(s)? This cannot be undone.`)) return;
+        // Close duplicates
+        chrome.tabs.remove(duplicateTabIds, () => {
+          // Remove from cache and refresh UI
+          allTabsCache = allTabsCache.filter(tab => !duplicateTabIds.includes(tab.id));
+          filterAndRender(document.getElementById('search-input')?.value || '');
+        });
+      });
+    });
+  }
 });
 
 logAndRenderGroupedTabs(); 

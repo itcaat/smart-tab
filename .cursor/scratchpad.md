@@ -1,6 +1,8 @@
 # Background and Motivation
 Пользователь хочет, чтобы расширение Chrome **smart tab** использовало всю доступную ширину экрана для плиток (групп вкладок), сохраняя при этом стиль masonry (Pinterest-подобная кладка). Это улучшит использование пространства и визуальное восприятие при большом количестве групп.
 
+**Новое требование:** Добавить кнопку "Remove duplicates" рядом с кнопкой dark/light mode. Кнопка должна удалять дубликаты вкладок (оставлять только одну вкладку с уникальным URL, остальные закрывать) и работать быстро и безопасно для пользователя.
+
 # Key Challenges and Analysis
 - Получение списка всех открытых вкладок браузера.
 - Группировка вкладок по домену/сайту.
@@ -11,6 +13,11 @@
 - Локализация (опционально).
 - Производительность при большом количестве вкладок.
 - **Реализация адаптивного masonry-алгоритма, чтобы плитки всегда занимали всю ширину контейнера, не ломая кладку.**
+- **Удаление дубликатов вкладок:**
+  - Определить, что считать дубликатом (точное совпадение URL).
+  - Реализовать безопасное закрытие дубликатов через chrome.tabs.remove().
+  - Обновить UI после удаления дубликатов.
+  - Кнопка должна быть визуально согласована с dark/light mode switcher и располагаться рядом с ней.
 
 # High-level Task Breakdown
 1. Создать структуру расширения Chrome (manifest, папки, базовые файлы).
@@ -27,6 +34,14 @@
    - Success: Все работает стабильно, нет багов, UX удобен.
 7. **Сделать плитки (группы) адаптивными: чтобы они всегда занимали всю ширину контейнера, сохраняя masonry-стиль.**
    - Success: При любом размере окна плитки равномерно распределяются по ширине, нет горизонтального скролла, masonry-эффект не ломается.
+8. **Добавить кнопку "Remove duplicates" рядом с dark/light mode:**
+   - Success:
+     - Кнопка визуально согласована с theme-switcher, находится рядом с ней.
+     - При нажатии на кнопку происходит удаление всех дубликатов вкладок (оставляется только одна вкладка с каждым уникальным URL).
+     - После удаления дубликатов UI обновляется автоматически.
+     - Пользователь получает краткое уведомление о количестве закрытых дубликатов (например, alert или toast).
+     - Кнопка работает корректно как в светлой, так и в темной теме.
+     - Нет багов: не закрываются нужные вкладки, не возникает ошибок в UI.
 
 ## Project Status Board
 
@@ -44,6 +59,7 @@
 - [x] Add a 'Close All Tabs' button to each tile (group), with confirmation and smooth animation (completed)
 - [x] Update user-facing description in manifest.json
 - [x] Awaiting user review of new description (user approved)
+- [x] Add "Remove duplicates" button near dark/light mode switcher (UI, logic, notification, test) — implemented, pending user test
 
 ## Executor's Feedback or Assistance Requests
 
@@ -60,6 +76,8 @@ Previous implementation pinned individual tabs, but user clarified the requireme
 
 - Implemented dark mode and a switcher on the top right corner. The theme is persisted in localStorage and respects system preferences on first load. Colors and fonts follow best practices for readability and contrast.
 - Opened newtab.html for manual verification. Please check if the dark mode and switcher work as expected and if the color scheme and fonts look good to you. Let me know if you want any adjustments. 
+
+- Реализована кнопка "Remove duplicates" рядом с переключателем темы. Кнопка удаляет все дубликаты вкладок (оставляет только одну вкладку с каждым уникальным URL), показывает уведомление о количестве закрытых вкладок, и обновляет UI. Кнопка стилизована под светлую и тёмную темы. Пожалуйста, протестируйте работу кнопки: откройте несколько дубликатов вкладок, нажмите "Remove duplicates" и проверьте, что остаётся по одной вкладке на каждый уникальный URL, а UI и уведомления работают корректно. Если потребуется доработка или появятся баги — дайте знать!
 
 ## Lessons
 
