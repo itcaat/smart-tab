@@ -10,12 +10,13 @@ body {
   background: #f4f6fa;
   margin: 0;
   padding: 0;
+  padding-bottom: 60px; /* Space for fixed footer */
 }
 
 #app {
   width: 100%;
   margin: 0;
-  background: #fff;
+  background: #f4f6fa;
   border-radius: 0;
   box-shadow: none;
   padding: 16px 12px;
@@ -162,7 +163,7 @@ body.dark {
   color: #f5f6fa;
 }
 body.dark #app {
-  background: #23262f;
+  background: #181a20;
 }
 body.dark .speeddial-group {
   background: #20222a;
@@ -263,4 +264,49 @@ body.dark #remove-dupes-btn:hover {
   transform: scale(0.95);
   transition: opacity 0.25s, transform 0.25s;
   z-index: 2;
+}
+
+/* Footer links styling */
+#footer-links {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 16px;
+  background: #fff;
+  z-index: 100;
+}
+
+#footer-links a {
+  color: #666;
+  text-decoration: none;
+  margin: 0 12px;
+  font-size: 0.9em;
+  transition: color 0.2s;
+}
+
+#footer-links a:hover {
+  color: #333;
+}
+
+#footer-links span {
+  color: #ccc;
+}
+
+/* Dark mode footer styling */
+body.dark #footer-links {
+  background: #181a20;
+}
+
+body.dark #footer-links a {
+  color: #b0b4bb;
+}
+
+body.dark #footer-links a:hover {
+  color: #ffe082;
+}
+
+body.dark #footer-links span {
+  color: #444857;
 } 
