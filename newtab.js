@@ -441,13 +441,8 @@ window.addEventListener('DOMContentLoaded', () => {
     rateExtensionLink.addEventListener('click', (e) => {
       e.preventDefault();
       // Open Chrome Web Store rating page for the extension
-      if (chrome.runtime && chrome.runtime.id) {
-        const storeUrl = `https://chrome.google.com/webstore/detail/${chrome.runtime.id}`;
-        chrome.tabs.create({ url: storeUrl });
-      } else {
-        // Fallback for development
-        alert('Please rate the extension on the Chrome Web Store!');
-      }
+      const storeUrl = `https://chrome.google.com/webstore/detail/inogfehnhcebnnojoifmabiccedlllpl`;
+      chrome.tabs.create({ url: storeUrl });
     });
   }
 
@@ -455,7 +450,7 @@ window.addEventListener('DOMContentLoaded', () => {
     donateLink.addEventListener('click', (e) => {
       e.preventDefault();
       // You can customize this URL to your preferred donation platform
-      const donateUrl = 'https://www.buymeacoffee.com/yourusername'; // Replace with actual donation URL
+      const donateUrl = 'https://tbank.ru/cf/oR5OW5IIUn'; // Replace with actual donation URL
       chrome.tabs.create({ url: donateUrl });
     });
   }
