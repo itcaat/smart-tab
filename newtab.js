@@ -134,23 +134,25 @@ function renderSpeedDial(groups) {
         li.classList.add('tab-removing');
         li.style.pointerEvents = 'none';
       });
-      setTimeout(() => {
-        // Remove all tabs in this group from allTabsCache
-        allTabsCache = allTabsCache.filter(t => {
-          try {
-            const url = new URL(t.url);
-            return url.hostname !== domain;
-          } catch {
-            return true;
-          }
-        });
-        // Close all tabs in Chrome
-        tabs.forEach(tab => {
-          if (chrome.tabs) chrome.tabs.remove(tab.id);
-        });
-        // Re-render to remove the group
-        filterAndRender(document.getElementById('search-input')?.value || '');
-      }, 320); // match CSS transition
+              setTimeout(() => {
+          // Remove all tabs in this group from allTabsCache
+          allTabsCache = allTabsCache.filter(t => {
+            try {
+              const url = new URL(t.url);
+              return url.hostname !== domain;
+            } catch {
+              return true;
+            }
+          });
+          // Close all tabs in Chrome
+          tabs.forEach(tab => {
+            if (chrome.tabs) chrome.tabs.remove(tab.id);
+          });
+          // Re-render to remove the group
+          filterAndRender(document.getElementById('search-input')?.value || '');
+          // Update duplicate count after closing all tabs in group
+          updateDuplicateCount();
+        }, 320); // match CSS transition
     });
     header.appendChild(closeAllBtn);
     group.appendChild(header);
@@ -189,6 +191,8 @@ function renderSpeedDial(groups) {
             if (groupTabs.length === 0) {
               filterAndRender(document.getElementById('search-input')?.value || '');
             }
+            // Update duplicate count after closing tab
+            updateDuplicateCount();
           }, 320); // match CSS transition
         }
       });
@@ -250,6 +254,60 @@ function renderSpeedDial(groups) {
 
 let allTabsCache = [];
 
+// Function to calculate duplicate count and update button text
+function updateDuplicateCount() {
+  console.log('updateDuplicateCount called');
+  // Small delay to ensure DOM is ready
+  setTimeout(() => {
+    const removeDupesBtn = document.getElementById('remove-dupes-btn');
+    if (!removeDupesBtn || !chrome.tabs) {
+      console.log('updateDuplicateCount: Button or chrome.tabs not available');
+      return;
+    }
+    
+    // Get the current tab's id (the extension's new tab page)
+    chrome.tabs.query({active: true, currentWindow: true}, (currentTabs) => {
+      const currentTabId = currentTabs && currentTabs.length > 0 ? currentTabs[0].id : null;
+      console.log('updateDuplicateCount: Current tab ID:', currentTabId);
+      console.log('updateDuplicateCount: Total tabs in cache:', allTabsCache.length);
+      
+      // Find duplicates: keep one tab per unique URL, but never close the current extension tab
+      const urlToTab = {};
+      const duplicateTabIds = [];
+      for (const tab of allTabsCache) {
+        if (!tab.url) continue;
+        
+        // Skip extension new tab pages and chrome://newtab
+        try {
+          const url = new URL(tab.url);
+          if (url.protocol === 'chrome-extension:' || 
+              url.href === 'chrome://newtab/' ||
+              url.href.includes('chrome-extension://newtab')) {
+            continue;
+          }
+        } catch (e) {
+          // Skip invalid URLs
+          continue;
+        }
+        
+        if (urlToTab[tab.url]) {
+          // Only add to duplicates if not the current tab
+          if (tab.id !== currentTabId) {
+            duplicateTabIds.push(tab.id);
+          }
+        } else {
+          urlToTab[tab.url] = tab.id;
+        }
+      }
+      // Update button text with count
+      const count = duplicateTabIds.length;
+      console.log('updateDuplicateCount: Duplicate count:', count);
+      removeDupesBtn.textContent = count > 0 ? `🗑️ Remove duplicates(${count})` : '🗑️ Remove duplicates';
+      console.log('updateDuplicateCount: Button text updated to:', removeDupesBtn.textContent);
+    });
+  }, 100);
+}
+
 function filterAndRender(query) {
   query = (query || '').trim().toLowerCase();
   const filteredGroups = {};
@@ -279,6 +337,8 @@ function logAndRenderGroupedTabs() {
   chrome.tabs.query({}, (tabs) => {
     allTabsCache = tabs;
     filterAndRender(document.getElementById('search-input')?.value || '');
+    // Update duplicate count after loading tabs
+    updateDuplicateCount();
   });
 }
 
@@ -287,6 +347,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (search) {
     search.addEventListener('input', e => {
       filterAndRender(search.value);
+      // Update duplicate count after search filter
+      updateDuplicateCount();
     });
   }
 
@@ -331,6 +393,20 @@ window.addEventListener('DOMContentLoaded', () => {
         const duplicateTabIds = [];
         for (const tab of allTabsCache) {
           if (!tab.url) continue;
+          
+          // Skip extension new tab pages and chrome://newtab
+          try {
+            const url = new URL(tab.url);
+            if (url.protocol === 'chrome-extension:' || 
+                url.href === 'chrome://newtab/' ||
+                url.href.includes('chrome-extension://newtab')) {
+              continue;
+            }
+          } catch (e) {
+            // Skip invalid URLs
+            continue;
+          }
+          
           if (urlToTab[tab.url]) {
             // Only add to duplicates if not the current tab
             if (tab.id !== currentTabId) {
@@ -350,6 +426,8 @@ window.addEventListener('DOMContentLoaded', () => {
           // Remove from cache and refresh UI
           allTabsCache = allTabsCache.filter(tab => !duplicateTabIds.includes(tab.id));
           filterAndRender(document.getElementById('search-input')?.value || '');
+          // Update duplicate count after removal
+          updateDuplicateCount();
         });
       });
     });
