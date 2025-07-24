@@ -350,6 +350,32 @@ window.addEventListener('DOMContentLoaded', () => {
       // Update duplicate count after search filter
       updateDuplicateCount();
     });
+    
+    // Handle Enter key - search in default search engine
+    search.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const query = search.value.trim();
+        if (query) {
+          // Use default search engine
+          const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+          if (chrome.tabs) {
+            chrome.tabs.create({ url: searchUrl }, () => {
+              // Close the extension window after creating the search tab
+              window.close();
+            });
+          }
+        }
+      }
+      
+      // Handle Escape key - clear search input
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        search.value = '';
+        filterAndRender('');
+        search.blur(); // Remove focus from input
+      }
+    });
   }
 
   // Dark mode logic
